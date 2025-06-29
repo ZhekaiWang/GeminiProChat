@@ -7,7 +7,7 @@ const genAI = apiBaseUrl
   ? new GoogleGenerativeAI(apiKey, apiBaseUrl)
   : new GoogleGenerativeAI(apiKey)
 
-export const startChatAndSendMessageStream = async(history: ChatMessage[], newMessage: string) => {
+export const startChatAndSendMessageStream = async(history: ChatMessage[], newMessage: { parts: { text: string }[] }) => {
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
   const chat = model.startChat({
@@ -27,7 +27,7 @@ export const startChatAndSendMessageStream = async(history: ChatMessage[], newMe
   })
 
   // Use sendMessageStream for streaming responses
-  const result = await chat.sendMessageStream(newMessage)
+  const result = await chat.sendMessageStream(newMessage.parts)
 
   const encodedStream = new ReadableStream({
     async start(controller) {
