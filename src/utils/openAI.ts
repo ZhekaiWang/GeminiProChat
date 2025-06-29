@@ -8,12 +8,12 @@ const genAI = apiBaseUrl
   : new GoogleGenerativeAI(apiKey)
 
 export const startChatAndSendMessageStream = async(history: ChatMessage[], newMessage: string) => {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
   const chat = model.startChat({
     history: history.map(msg => ({
       role: msg.role,
-      parts: msg.parts.map(part => part.text).join(''), // Join parts into a single string
+      parts: msg.parts.map(part => ({ text: part.text })), // Join parts into a single string
     })),
     generationConfig: {
       maxOutputTokens: 8000,
